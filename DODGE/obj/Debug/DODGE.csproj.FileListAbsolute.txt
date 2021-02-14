@@ -1,0 +1,7 @@
+E:\Coding\C#\DODGE\DODGE\bin\Debug\DODGE.exe.config
+E:\Coding\C#\DODGE\DODGE\bin\Debug\DODGE.exe
+E:\Coding\C#\DODGE\DODGE\bin\Debug\DODGE.pdb
+E:\Coding\C#\DODGE\DODGE\obj\Debug\DODGE.csprojAssemblyReference.cache
+E:\Coding\C#\DODGE\DODGE\obj\Debug\DODGE.csproj.CoreCompileInputs.cache
+E:\Coding\C#\DODGE\DODGE\obj\Debug\DODGE.exe
+E:\Coding\C#\DODGE\DODGE\obj\Debug\DODGE.pdb
