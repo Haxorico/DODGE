@@ -5,3 +5,8 @@ E:\Coding\C#\DODGE\DODGE\obj\Debug\DODGE.csprojAssemblyReference.cache
 E:\Coding\C#\DODGE\DODGE\obj\Debug\DODGE.csproj.CoreCompileInputs.cache
 E:\Coding\C#\DODGE\DODGE\obj\Debug\DODGE.exe
 E:\Coding\C#\DODGE\DODGE\obj\Debug\DODGE.pdb
+E:\Coding\C#\DODGE\DODGE\obj\Debug\Interop.WMPLib.dll
+E:\Coding\C#\DODGE\DODGE\obj\Debug\DODGE.csproj.ResolveComReference.cache
+E:\Coding\C#\DODGE\DODGE\obj\Debug\DODGE.Properties.Resource.resources
+E:\Coding\C#\DODGE\DODGE\obj\Debug\DODGE.csproj.GenerateResource.cache
+E:\Coding\C#\DODGE\DODGE\bin\Debug\External\Sound\bgE1M1.mp3

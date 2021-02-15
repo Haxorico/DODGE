@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+
+using WMPLib;
+
 using DODGE.Structs;
 using DODGE.Helpers;
 using DODGE.Data;
@@ -12,11 +15,20 @@ namespace DODGE
         private PlayerUnit player { get; set; }
         private List<EnemyUnit> enemies { get; set; }
         private Stopwatch stopwatch { get; set; }
+       // private WindowsMediaPlayer soundFXPlayer;
+        private WindowsMediaPlayer bgMusicPlayer;
+
         private bool gameOver()
         {
+            //sotp the background music
+            bgMusicPlayer.controls.stop();
+            System.Media.SoundPlayer sp = new System.Media.SoundPlayer(Properties.Resource.dodge);
+            sp.Play();
+            //wait 1 second so the user wont input any moves.. its anoying..
+            System.Threading.Thread.Sleep(1000);
             this.stopwatch.Reset();
             Console.Clear();
-            Console.Write("You died :(\n" +
+            Console.Write("Why didn't you... DODGE!\n" +
                 $"Score: {enemies.Count}\n" +
                 "What would you like to do?\n" +
                 "0)Exit\n" +
@@ -32,21 +44,45 @@ namespace DODGE
             this.enemies.Clear();
             this.enemies.Add(new EnemyUnit_LeftOnly(1000));
             this.stopwatch.Start();
+            bgMusicPlayer.controls.play();
         }
-        public Dodge()
-        {
-            this.player = new PlayerUnit("P",new Vector2(0,0));
-            this.enemies = new List<EnemyUnit>();
-            this.stopwatch = new Stopwatch();
 
-            this.resetGame();
+        private void addEnemy()
+        {
+            int r = U.GetRandomInt(1, 4);
+            if (r == 1)
+            {
+                enemies.Add(new EnemyUnit_LeftOnly());
+            }
+            else if (r == 2)
+            {
+                enemies.Add(new EnemyUnit_RightOnly());
+            }
+            else if (r == 3)
+            {
+                enemies.Add(new EnemyUnit_UpOnly());
+            }
+            else
+            {
+                throw new Exception($"No such unit [{r}]");
+            }
+            System.IO.UnmanagedMemoryStream fileToPlay = Properties.Resource.point1;
+            if (enemies.Count % 10 == 0)
+                fileToPlay = Properties.Resource.point10;
+
+            System.Media.SoundPlayer sp = new System.Media.SoundPlayer(fileToPlay);
+            sp.Play();
+        }
+
+        private void play()
+        {
             while (true)
             {
-                bool addEnemy = false;
-                foreach(EnemyUnit enemy in enemies)
+                bool shouldAddEnemy = false;
+                foreach (EnemyUnit enemy in enemies)
                 {
                     if (!enemy.Update((int)stopwatch.ElapsedMilliseconds))
-                        addEnemy = true;
+                        shouldAddEnemy = true;
                     if (enemy.IsUnitHittingAnotherUnit(player))
                     {
                         if (gameOver())
@@ -59,29 +95,23 @@ namespace DODGE
                     }
                 }
                 player.Update();
-                if (addEnemy)
+                if (shouldAddEnemy)
                 {
-                    int r = U.GetRandomInt(1, 4);
-                    if (r==1)
-                    {
-                        enemies.Add(new EnemyUnit_LeftOnly());
-                    }
-                    else if (r == 2)
-                    {
-                        enemies.Add(new EnemyUnit_RightOnly());
-                    }
-                    else if (r == 3)
-                    {
-                        enemies.Add(new EnemyUnit_UpOnly());
-                    }
-                    else
-                    {
-                        throw new Exception($"No such unit [{r}]");
-                    }
+                    addEnemy();
                 }
                 stopwatch.Restart();
                 System.Threading.Thread.Sleep(5);
             }
+        }
+        public Dodge()
+        {
+            this.player = new PlayerUnit("P",new Vector2(0,0));
+            this.enemies = new List<EnemyUnit>();
+            this.stopwatch = new Stopwatch();
+            this.bgMusicPlayer = new WindowsMediaPlayer();
+            this.bgMusicPlayer.URL = "External\\Sound\\bgE1M1.mp3";
+            this.resetGame();
+            this.play();
             
             
         }
