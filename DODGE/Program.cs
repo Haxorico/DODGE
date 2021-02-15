@@ -9,10 +9,10 @@ namespace DODGE
 {
     class Program
     {
-        public static Vector2 ScreenSize = new Vector2(Console.WindowWidth, Console.WindowHeight); 
         static void Main(string[] args)
         {
             Console.CursorVisible = false;
+            Console.SetWindowSize(202, 42);
             new Dodge();
         }
     }

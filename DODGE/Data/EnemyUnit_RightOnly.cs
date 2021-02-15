@@ -14,12 +14,12 @@ namespace DODGE.Data
         public EnemyUnit_RightOnly(string name, Vector2 position, int speed) : base(name, EnemyType.LEFT_ONLY, position, speed) { }
 
         public EnemyUnit_RightOnly() : base(">", EnemyType.LEFT_ONLY, new Vector2(
-            2,
-            U.GetRandomInt(1, Program.ScreenSize.Y)))
+            0,
+            U.GetRandomY()))
         { }
         public EnemyUnit_RightOnly(int speed) : base(">", EnemyType.LEFT_ONLY, new Vector2(
-            2,
-            U.GetRandomInt(1, Program.ScreenSize.Y)))
+            0,
+            U.GetRandomY()))
         {
             this.Speed = speed;
         }
@@ -49,7 +49,7 @@ namespace DODGE.Data
             else
             {
                 U.ClearAt(oldPosition);
-                this.Position = new Vector2(1, U.GetRandomInt(0, Program.ScreenSize.Y - 2));
+                this.Position = new Vector2(0, U.GetRandomY());
                 if (this.Speed < MAX_SPEED)
                     this.Speed = (int)(this.Speed * 1.1);
                 return false;

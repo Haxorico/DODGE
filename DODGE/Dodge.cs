@@ -15,8 +15,47 @@ namespace DODGE
         private PlayerUnit player { get; set; }
         private List<EnemyUnit> enemies { get; set; }
         private Stopwatch stopwatch { get; set; }
-       // private WindowsMediaPlayer soundFXPlayer;
         private WindowsMediaPlayer bgMusicPlayer;
+
+        private void play()
+        {
+            while (true)
+            {
+                bool shouldAddEnemy = false;
+                foreach (EnemyUnit enemy in enemies)
+                {
+                    if (!enemy.Update((int)stopwatch.ElapsedMilliseconds))
+                        shouldAddEnemy = true;
+                    if (enemy.IsUnitHittingAnotherUnit(player))
+                    {
+                        if (gameOver())
+                        {
+                            this.resetGame();
+                            break;
+                        }
+                        else return;
+                    }
+                }
+                player.Update();
+                if (shouldAddEnemy) addEnemy();
+
+                stopwatch.Restart();
+                System.Threading.Thread.Sleep(5);
+            }
+        }
+        
+        private void resetGame()
+        {
+            Console.Clear();
+            U.DrawBorders();
+            player.ResetPosition();
+            U.WriteAt(player.Name, player.Position);
+            this.enemies.Clear();
+            this.enemies.Add(new EnemyUnit_LeftOnly(1000));
+            updateScore();
+            this.stopwatch.Start();
+            bgMusicPlayer.controls.play();
+        }
 
         private bool gameOver()
         {
@@ -36,27 +75,17 @@ namespace DODGE
                 "Choice: ");
             return Console.ReadLine() == "1";
         }
-        private void resetGame()
-        {
-            Console.Clear();
-            player.ResetPosition();
-            U.WriteAt(player.Name, player.Position);
-            this.enemies.Clear();
-            this.enemies.Add(new EnemyUnit_LeftOnly(1000));
-            this.stopwatch.Start();
-            bgMusicPlayer.controls.play();
-        }
 
         private void addEnemy()
         {
             int r = U.GetRandomInt(1, 4);
             if (r == 1)
             {
-                enemies.Add(new EnemyUnit_LeftOnly());
+                enemies.Add(new EnemyUnit_LeftOnly(800));
             }
             else if (r == 2)
             {
-                enemies.Add(new EnemyUnit_RightOnly());
+                enemies.Add(new EnemyUnit_RightOnly(800));
             }
             else if (r == 3)
             {
@@ -66,43 +95,22 @@ namespace DODGE
             {
                 throw new Exception($"No such unit [{r}]");
             }
+            updateScore();
             System.IO.UnmanagedMemoryStream fileToPlay = Properties.Resource.point1;
             if (enemies.Count % 10 == 0)
                 fileToPlay = Properties.Resource.point10;
 
             System.Media.SoundPlayer sp = new System.Media.SoundPlayer(fileToPlay);
             sp.Play();
+            
         }
 
-        private void play()
+        private void updateScore()
         {
-            while (true)
-            {
-                bool shouldAddEnemy = false;
-                foreach (EnemyUnit enemy in enemies)
-                {
-                    if (!enemy.Update((int)stopwatch.ElapsedMilliseconds))
-                        shouldAddEnemy = true;
-                    if (enemy.IsUnitHittingAnotherUnit(player))
-                    {
-                        if (gameOver())
-                        {
-                            this.resetGame();
-                            break;
-                        }
-                        else
-                            return;
-                    }
-                }
-                player.Update();
-                if (shouldAddEnemy)
-                {
-                    addEnemy();
-                }
-                stopwatch.Restart();
-                System.Threading.Thread.Sleep(5);
-            }
+            Console.SetCursorPosition(0, 0);
+            Console.Write($"Score: {enemies.Count} Position: <{player.Position.X},{player.Position.Y}>");
         }
+
         public Dodge()
         {
             this.player = new PlayerUnit("P",new Vector2(0,0));
@@ -110,10 +118,9 @@ namespace DODGE
             this.stopwatch = new Stopwatch();
             this.bgMusicPlayer = new WindowsMediaPlayer();
             this.bgMusicPlayer.URL = "External\\Sound\\bgE1M1.mp3";
+            this.bgMusicPlayer.controls.stop();
             this.resetGame();
-            this.play();
-            
-            
+            this.play();   
         }
         
     }

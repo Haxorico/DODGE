@@ -23,14 +23,13 @@ namespace DODGE.Data
         public bool IsUnitHittingAnotherUnit(Unit u)
         {
             //#TODO overide the Equal function of the struct..
-            return this.Position.X == u.Position.X && this.Position.Y == u.Position.Y;
+            bool b = this.Position.X == u.Position.X && this.Position.Y == u.Position.Y;
+            if (b)
+                return b;
+            return b;
         }
 
-        private bool isMoveValid(Vector2 newPosition)
-        {
-            return newPosition.Y >= 0 && newPosition.Y < Program.ScreenSize.Y && 
-                   newPosition.X >= 0 && newPosition.X < Program.ScreenSize.X;
-        }
+        
 
         protected bool move(MoveType mt, uint len)
         {
@@ -61,7 +60,7 @@ namespace DODGE.Data
             do
             {
                 Vector2 newPosition = new Vector2(this.Position.X + disX, this.Position.Y + disY);
-                if (isMoveValid(newPosition))
+                if (U.IsMoveValid(newPosition))
                     this.Position = newPosition;
                 else
                     return false;

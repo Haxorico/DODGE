@@ -14,7 +14,7 @@ namespace DODGE.Data
 
         public void ResetPosition()
         {
-            this.Position = new Vector2(1, 1);
+            this.Position = new Vector2(0, 0);
         }
 
         public bool Update()
